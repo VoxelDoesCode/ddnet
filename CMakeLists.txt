@@ -1430,8 +1430,8 @@ set(EXPECTED_DATA
   fonts/DejaVuSans.ttf
   fonts/Font_Awesome_6_Free-Solid-900.otf
   fonts/GlowSansJ-Compressed-Book.otf
-  fonts/index.json
   fonts/SourceHanSans.ttc
+  fonts/index.json
   images/arrow.png
   images/audio_source.png
   images/console_bar.png
