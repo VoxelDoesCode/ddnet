@@ -173,22 +173,12 @@ void CParticles::OnInit()
 
 	m_ParticleQuadContainerIndex = Graphics()->CreateQuadContainer(false);
 
-	for(int i = 0; i <= (SPRITE_PART9 - SPRITE_PART_SLICE); ++i)
+	for(int i = 0; i < GameClient()->m_Textures.NUM_PARTICLE_TEXTURES; ++i)
 	{
 		Graphics()->QuadsSetSubset(0, 0, 1, 1);
 		RenderTools()->QuadContainerAddSprite(m_ParticleQuadContainerIndex, 1.f);
 	}
 	Graphics()->QuadContainerUpload(m_ParticleQuadContainerIndex);
-
-	m_ExtraParticleQuadContainerIndex = Graphics()->CreateQuadContainer(false);
-
-	for(int i = 0; i <= (SPRITE_PART_SPARKLE - SPRITE_PART_SNOWFLAKE); ++i)
-	{
-		Graphics()->QuadsSetSubset(0, 0, 1, 1);
-		RenderTools()->QuadContainerAddSprite(m_ExtraParticleQuadContainerIndex, 1.f);
-	}
-
-	Graphics()->QuadContainerUpload(m_ExtraParticleQuadContainerIndex);
 }
 
 bool CParticles::ParticleIsVisibleOnScreen(const vec2 &CurPos, float CurSize)
@@ -208,15 +198,15 @@ bool CParticles::ParticleIsVisibleOnScreen(const vec2 &CurPos, float CurSize)
 
 void CParticles::RenderGroup(int Group)
 {
-	IGraphics::CTextureHandle *aParticles = GameClient()->m_ParticlesSkin.m_aSpriteParticles;
-	int FirstParticleOffset = SPRITE_PART_SLICE;
+	IGraphics::CTextureHandle *aParticles = GameClient()->m_Textures.m_aParticleTextures;
+	// int FirstParticleOffset = SPRITE_PART_SLICE;
 	int ParticleQuadContainerIndex = m_ParticleQuadContainerIndex;
-	if(Group == GROUP_EXTRA || Group == GROUP_TRAIL_EXTRA)
+	/* if(Group == GROUP_EXTRA || Group == GROUP_TRAIL_EXTRA)
 	{
 		aParticles = GameClient()->m_ExtrasSkin.m_aSpriteParticles;
 		FirstParticleOffset = SPRITE_PART_SNOWFLAKE;
 		ParticleQuadContainerIndex = m_ExtraParticleQuadContainerIndex;
-	}
+	} */
 
 	// don't use the buffer methods here, else the old renderer gets many draw calls
 	if(Graphics()->IsQuadContainerBufferingEnabled())
@@ -270,8 +260,8 @@ void CParticles::RenderGroup(int Group)
 			{
 				if((size_t)CurParticleRenderCount == gs_GraphicsMaxParticlesRenderCount || LastColor.r != m_aParticles[i].m_Color.r || LastColor.g != m_aParticles[i].m_Color.g || LastColor.b != m_aParticles[i].m_Color.b || LastColor.a != Alpha || LastQuadOffset != QuadOffset)
 				{
-					Graphics()->TextureSet(aParticles[LastQuadOffset - FirstParticleOffset]);
-					Graphics()->RenderQuadContainerAsSpriteMultiple(ParticleQuadContainerIndex, LastQuadOffset - FirstParticleOffset, CurParticleRenderCount, s_aParticleRenderInfo);
+					Graphics()->TextureSet(aParticles[LastQuadOffset]);
+					Graphics()->RenderQuadContainerAsSpriteMultiple(ParticleQuadContainerIndex, LastQuadOffset, CurParticleRenderCount, s_aParticleRenderInfo);
 					CurParticleRenderCount = 0;
 					LastQuadOffset = QuadOffset;
 
@@ -298,8 +288,8 @@ void CParticles::RenderGroup(int Group)
 			i = m_aParticles[i].m_NextPart;
 		}
 
-		Graphics()->TextureSet(aParticles[LastQuadOffset - FirstParticleOffset]);
-		Graphics()->RenderQuadContainerAsSpriteMultiple(ParticleQuadContainerIndex, LastQuadOffset - FirstParticleOffset, CurParticleRenderCount, s_aParticleRenderInfo);
+		Graphics()->TextureSet(aParticles[LastQuadOffset]);
+		Graphics()->RenderQuadContainerAsSpriteMultiple(ParticleQuadContainerIndex, LastQuadOffset, CurParticleRenderCount, s_aParticleRenderInfo);
 	}
 	else
 	{
@@ -322,7 +312,7 @@ void CParticles::RenderGroup(int Group)
 			// the current position, respecting the size, is inside the viewport, render it, else ignore
 			if(ParticleIsVisibleOnScreen(p, Size))
 			{
-				Graphics()->TextureSet(aParticles[m_aParticles[i].m_Spr - FirstParticleOffset]);
+				Graphics()->TextureSet(aParticles[m_aParticles[i].m_Spr]);
 				Graphics()->QuadsBegin();
 
 				Graphics()->QuadsSetRotation(m_aParticles[i].m_Rot);

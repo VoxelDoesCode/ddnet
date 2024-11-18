@@ -997,7 +997,6 @@ endif()
 
 set(EXPECTED_DATA
   announcement.txt
-  arrow.png
   assets/entities/comfort/ddnet.png
   assets/entities/license.txt
   assets/game/game_06.png
@@ -1136,8 +1135,6 @@ set(EXPECTED_DATA
   blob.png
   censorlist.txt
   communityicons/none.png
-  console.png
-  console_bar.png
   countryflags/AD.png
   countryflags/AE.png
   countryflags/AF.png
@@ -1392,7 +1389,6 @@ set(EXPECTED_DATA
   countryflags/index.txt
   deadtee.png
   debug_font.png
-  editor/audio_source.png
   editor/automap/basic_freeze.rules
   editor/automap/ddmax_freeze.rules
   editor/automap/ddnet_grass.rules
@@ -1411,7 +1407,6 @@ set(EXPECTED_DATA
   editor/automap/winter_main.rules
   editor/background.png
   editor/checker.png
-  editor/cursor.png
   editor/cursor_resize.png
   editor/entities/DDNet.png
   editor/entities/F-DDrace.png
@@ -1427,25 +1422,167 @@ set(EXPECTED_DATA
   editor/entities_clear/race.png
   editor/entities_clear/vanilla.png
   editor/front.png
-  editor/speed_arrow.png
   editor/speed_arrow_array.png
   editor/speedup.png
   editor/switch.png
   editor/tele.png
   editor/tune.png
-  emoticons.png
-  extras.png
   fonts/DejaVuSans.ttf
   fonts/Font_Awesome_6_Free-Solid-900.otf
   fonts/GlowSansJ-Compressed-Book.otf
   fonts/SourceHanSans.ttc
   fonts/index.json
-  game.png
-  gui_buttons.png
-  gui_cursor.png
-  gui_icons.png
-  gui_logo.png
-  hud.png
+  images/arrow.png
+  images/audio_source.png
+  images/console_bar.png
+  images/console.png
+  images/cursor.png
+  images/emoticons/oop.png
+  images/emoticons/exclamation.png
+  images/emoticons/hearts.png
+  images/emoticons/drop.png
+  images/emoticons/dotdot.png
+  images/emoticons/music.png
+  images/emoticons/sorry.png
+  images/emoticons/ghost.png
+  images/emoticons/sushi.png
+  images/emoticons/splattee.png
+  images/emoticons/deviltee.png
+  images/emoticons/zomg.png
+  images/emoticons/zzz.png
+  images/emoticons/wtf.png
+  images/emoticons/eyes.png
+  images/emoticons/question.png
+  images/emoticons_icon.png
+  images/gui/audio_source.png
+  images/gui/background.png
+  images/gui/checker.png
+  images/gui/console.png
+  images/gui/console_bar.png
+  images/gui/cursor_main.png
+  images/gui/cursor_editor.png
+  images/gui/cursor_resize.png
+  images/gui/logo.png
+  images/gui/button_hover.png
+  images/gui/button_off.png
+  images/gui/button_on.png
+  images/gui/icon_emoticon_mute.png
+  images/gui/icon_friend.png
+  images/gui/icon_mute.png
+  images/gui/speed_arrow.png
+  images/hud/airjump_empty.png
+  images/hud/airjump_full.png
+  images/hud/armor_empty.png
+  images/hud/armor_full.png
+  images/hud/arrow.png
+  images/hud/health_empty.png
+  images/hud/health_full.png
+  images/hud/collision_disabled.png
+  images/hud/deep_frozen.png
+  images/hud/dummy_copy.png
+  images/hud/dummy_hammer.png
+  images/hud/endless_hook.png
+  images/hud/endless_jump.png
+  images/hud/freeze_bar_empty.png
+  images/hud/freeze_bar_empty_right.png
+  images/hud/freeze_bar_full.png
+  images/hud/freeze_bar_full_left.png
+  images/hud/gun_hit_disabled.png
+  images/hud/hook_hit_disabled.png
+  images/hud/hammer_hit_disabled.png
+  images/hud/shotgun_hit_disabled.png
+  images/hud/grenade_hit_disabled.png
+  images/hud/laser_hit_disabled.png
+  images/hud/jetpack.png
+  images/hud/live_frozen.png
+  images/hud/lock_mode.png
+  images/hud/ninja_bar_empty.png
+  images/hud/ninja_bar_empty_right.png
+  images/hud/ninja_bar_full.png
+  images/hud/ninja_bar_full_left.png
+  images/hud/practice_mode.png
+  images/hud/solo.png
+  images/hud/team_0_mode.png
+  images/hud/teleport_grenade.png
+  images/hud/teleport_gun.png
+  images/hud/teleport_laser.png
+  images/hud/strong_hook.png
+  images/hud/weak_hook.png
+  images/map_items/flag_blue.png
+  images/map_items/flag_red.png
+  images/map_items/pickup_armor.png
+  images/map_items/pickup_armor_grenade.png
+  images/map_items/pickup_armor_laser.png
+  images/map_items/pickup_armor_ninja.png
+  images/map_items/pickup_armor_shotgun.png
+  images/map_items/pickup_health.png
+  images/map_items/pickup_misc.png
+  images/particles/air_jump.png
+  images/particles/ball.png
+  images/particles/explosion_1.png
+  images/particles/hit_01.png
+  images/particles/shell.png
+  images/particles/slice.png
+  images/particles/smoke.png
+  images/particles/snowflake.png
+  images/particles/splat_1.png
+  images/particles/splat_2.png
+  images/particles/splat_3.png
+  images/particles/misc_1.png
+  images/particles/misc_2.png
+  images/particles/misc_3.png
+  images/particles/misc_4.png
+  images/particles/misc_5.png
+  images/particles/misc_6.png
+  images/particles/misc_7.png
+  images/particles/misc_8.png
+  images/particles/misc_9.png
+  images/particles/sparkle.png
+  images/particles/star_1.png
+  images/particles/star_2.png
+  images/particles/star_3.png
+  images/weapons/hook_chain.png
+  images/weapons/hook_head.png
+  images/weapons/hammer_body.png
+  images/weapons/hammer_cursor.png
+  images/weapons/gun_body.png
+  images/weapons/gun_cursor.png
+  images/weapons/gun_proj.png
+  images/weapons/gun_muzzle_1.png
+  images/weapons/gun_muzzle_2.png
+  images/weapons/gun_muzzle_3.png
+  images/weapons/shotgun_body.png
+  images/weapons/shotgun_cursor.png
+  images/weapons/shotgun_proj.png
+  images/weapons/shotgun_muzzle_1.png
+  images/weapons/shotgun_muzzle_2.png
+  images/weapons/shotgun_muzzle_3.png
+  images/weapons/grenade_body.png
+  images/weapons/grenade_cursor.png
+  images/weapons/grenade_proj.png
+  images/weapons/laser_body.png
+  images/weapons/laser_cursor.png
+  images/weapons/laser_proj.png
+  images/weapons/ninja_body.png
+  images/weapons/ninja_cursor.png
+  images/weapons/ninja_muzzle_1.png
+  images/weapons/ninja_muzzle_2.png
+  images/weapons/ninja_muzzle_3.png
+  images/extras.png
+  images/extras_icon.png
+  images/game.png
+  images/game_icon.png
+  images/gui_buttons.png
+  images/gui_cursor.png
+  images/gui_icons.png
+  images/gui_logo.png
+  images/hud.png
+  images/hud_icon.png
+  images/particles.png
+  images/particles_icon.png
+  images/race_flag.png
+  images/speed_arrow.png
+  images/strong_weak.png
   languages/arabic.txt
   languages/azerbaijanese.txt
   languages/belarusian.txt
@@ -1569,8 +1706,6 @@ set(EXPECTED_DATA
   menuimages/local_server.png
   menuimages/play_game.png
   menuimages/settings.png
-  particles.png
-  race_flag.png
   shader/pipeline.frag
   shader/pipeline.vert
   shader/prim.frag
@@ -1829,7 +1964,6 @@ set(EXPECTED_DATA
   skins7/warpaint.json
   skins7/x_ninja.json
   skins7/xmas_hat.png
-  strong_weak.png
   themes/auto.png
   themes/autumn.png
   themes/autumn_day.map
@@ -2401,6 +2535,8 @@ if(CLIENT)
     components/spectator.h
     components/statboard.cpp
     components/statboard.h
+    components/textures.cpp
+    components/textures.h
     components/tooltips.cpp
     components/tooltips.h
     components/voting.cpp

@@ -54,7 +54,7 @@ void CDamageInd::OnRender()
 	}
 	s_LastLocalTime = LocalTime();
 
-	Graphics()->TextureSet(GameClient()->m_GameSkin.m_aSpriteStars[0]);
+	Graphics()->TextureSet(GameClient()->m_Textures.m_aParticleTextures[CTextures::PARTICLE_STAR_1]);
 	for(int i = 0; i < m_NumItems;)
 	{
 		m_aItems[i].m_RemainingLife -= LifeAdjustment;

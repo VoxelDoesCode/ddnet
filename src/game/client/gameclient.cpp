@@ -111,7 +111,9 @@ void CGameClient::OnConsoleInit()
 	m_pHttp = Kernel()->RequestInterface<IHttp>();
 
 	// make a list of all the systems, make sure to add them in the correct render order
-	m_vpAll.insert(m_vpAll.end(), {&m_Skins,
+	m_vpAll.insert(m_vpAll.end(), {
+						  &m_Textures,
+						  &m_Skins,
 					      &m_Skins7,
 					      &m_CountryFlags,
 					      &m_MapImages,
@@ -3235,6 +3237,7 @@ bool CGameClient::IsLocalCharSuper() const
 
 void CGameClient::LoadGameSkin(const char *pPath, bool AsDir)
 {
+	/*
 	if(m_GameSkinLoaded)
 	{
 		Graphics()->UnloadTexture(&m_GameSkin.m_SpriteHealthFull);
@@ -3488,11 +3491,14 @@ void CGameClient::LoadGameSkin(const char *pPath, bool AsDir)
 		m_GameSkinLoaded = true;
 	}
 	ImgInfo.Free();
+	*/
+
+	// TODO: implement loading of other game packs
 }
 
 void CGameClient::LoadEmoticonsSkin(const char *pPath, bool AsDir)
 {
-	if(m_EmoticonsSkinLoaded)
+	/* if(m_EmoticonsSkinLoaded)
 	{
 		for(auto &SpriteEmoticon : m_EmoticonsSkin.m_aSpriteEmoticons)
 			Graphics()->UnloadTexture(&SpriteEmoticon);
@@ -3532,11 +3538,14 @@ void CGameClient::LoadEmoticonsSkin(const char *pPath, bool AsDir)
 		m_EmoticonsSkinLoaded = true;
 	}
 	ImgInfo.Free();
+	*/
+
+	// TODO: implement loading of other emoticon packs
 }
 
 void CGameClient::LoadParticlesSkin(const char *pPath, bool AsDir)
 {
-	if(m_ParticlesSkinLoaded)
+	/* if(m_ParticlesSkinLoaded)
 	{
 		Graphics()->UnloadTexture(&m_ParticlesSkin.m_SpriteParticleSlice);
 		Graphics()->UnloadTexture(&m_ParticlesSkin.m_SpriteParticleBall);
@@ -3603,10 +3612,15 @@ void CGameClient::LoadParticlesSkin(const char *pPath, bool AsDir)
 		m_ParticlesSkinLoaded = true;
 	}
 	ImgInfo.Free();
+
+	*/
+
+	// TODO: implement loading of other particles packs
 }
 
 void CGameClient::LoadHudSkin(const char *pPath, bool AsDir)
 {
+	/*
 	if(m_HudSkinLoaded)
 	{
 		Graphics()->UnloadTexture(&m_HudSkin.m_SpriteHudAirjump);
@@ -3704,10 +3718,13 @@ void CGameClient::LoadHudSkin(const char *pPath, bool AsDir)
 		m_HudSkinLoaded = true;
 	}
 	ImgInfo.Free();
+	*/ 
+	// TODO: implement loading of other hud packs
 }
 
 void CGameClient::LoadExtrasSkin(const char *pPath, bool AsDir)
 {
+	/*
 	if(m_ExtrasSkinLoaded)
 	{
 		Graphics()->UnloadTexture(&m_ExtrasSkin.m_SpriteParticleSnowflake);
@@ -3754,6 +3771,9 @@ void CGameClient::LoadExtrasSkin(const char *pPath, bool AsDir)
 		m_ExtrasSkinLoaded = true;
 	}
 	ImgInfo.Free();
+	*/
+
+	// TODO: remove this, we literally do not need an extras.png
 }
 
 void CGameClient::RefreshSkins()

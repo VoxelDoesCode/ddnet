@@ -57,6 +57,7 @@
 #include "components/sounds.h"
 #include "components/spectator.h"
 #include "components/statboard.h"
+#include "components/textures.h"
 #include "components/tooltips.h"
 #include "components/voting.h"
 
@@ -148,6 +149,7 @@ public:
 	CDamageInd m_DamageInd;
 	CVoting m_Voting;
 	CSpectator m_Spectator;
+	CTextures m_Textures;
 
 	CPlayers m_Players;
 	CNamePlates m_NamePlates;

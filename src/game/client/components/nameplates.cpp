@@ -70,19 +70,19 @@ void CNamePlates::RenderNameplate(vec2 Position, const CNetObj_PlayerInfo *pPlay
 		const vec2 ShowDirectionPos = vec2(Position.x - 11.0f, YOffset);
 		if(DirLeft)
 		{
-			Graphics()->TextureSet(g_pData->m_aImages[IMAGE_ARROW].m_Id);
+			Graphics()->TextureSet(GameClient()->m_Textures.m_aHudTextures[CTextures::HUD_ARROW]);
 			Graphics()->QuadsSetRotation(pi);
 			Graphics()->RenderQuadContainerAsSprite(m_DirectionQuadContainerIndex, 0, ShowDirectionPos.x - 30.f, ShowDirectionPos.y);
 		}
 		else if(DirRight)
 		{
-			Graphics()->TextureSet(g_pData->m_aImages[IMAGE_ARROW].m_Id);
+			Graphics()->TextureSet(GameClient()->m_Textures.m_aHudTextures[CTextures::HUD_ARROW]);
 			Graphics()->QuadsSetRotation(0);
 			Graphics()->RenderQuadContainerAsSprite(m_DirectionQuadContainerIndex, 0, ShowDirectionPos.x + 30.f, ShowDirectionPos.y);
 		}
 		if(Jump)
 		{
-			Graphics()->TextureSet(g_pData->m_aImages[IMAGE_ARROW].m_Id);
+			Graphics()->TextureSet(GameClient()->m_Textures.m_aHudTextures[CTextures::HUD_ARROW]);
 			Graphics()->QuadsSetRotation(pi * 3 / 2);
 			Graphics()->RenderQuadContainerAsSprite(m_DirectionQuadContainerIndex, 0, ShowDirectionPos.x, ShowDirectionPos.y);
 		}

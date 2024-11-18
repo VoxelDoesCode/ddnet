@@ -130,9 +130,9 @@ void CItems::RenderProjectile(const CProjectileData *pCurrent, int ItemId)
 			Graphics()->QuadsSetRotation(0);
 	}
 
-	if(GameClient()->m_GameSkin.m_aSpriteWeaponProjectiles[CurWeapon].IsValid())
+	if(GameClient()->m_Textures.m_aWeaponProjectiles[CurWeapon].IsValid())
 	{
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_aSpriteWeaponProjectiles[CurWeapon]);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aWeaponProjectiles[CurWeapon]);
 		Graphics()->SetColor(1.f, 1.f, 1.f, Alpha);
 		Graphics()->RenderQuadContainerAsSprite(m_ItemsQuadContainerIndex, m_aProjectileOffset[CurWeapon], Pos.x, Pos.y);
 	}
@@ -148,29 +148,29 @@ void CItems::RenderPickup(const CNetObj_Pickup *pPrev, const CNetObj_Pickup *pCu
 	if(pCurrent->m_Type == POWERUP_HEALTH)
 	{
 		QuadOffset = m_PickupHealthOffset;
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpritePickupHealth);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_PICKUP_HEALTH]);
 	}
 	else if(pCurrent->m_Type == POWERUP_ARMOR)
 	{
 		QuadOffset = m_PickupArmorOffset;
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpritePickupArmor);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_PICKUP_ARMOR]);
 	}
 	else if(pCurrent->m_Type == POWERUP_WEAPON)
 	{
 		QuadOffset = m_aPickupWeaponOffset[CurWeapon];
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_aSpritePickupWeapons[CurWeapon]);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aWeaponBodies[CurWeapon]);
 	}
 	else if(pCurrent->m_Type == POWERUP_NINJA)
 	{
 		QuadOffset = m_PickupNinjaOffset;
 		m_pClient->m_Effects.PowerupShine(Pos, vec2(96, 18), 1.0f);
 		Pos.x -= 10.0f;
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpritePickupNinja);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aWeaponBodies[WEAPON_NINJA]);
 	}
 	else if(pCurrent->m_Type >= POWERUP_ARMOR_SHOTGUN && pCurrent->m_Type <= POWERUP_ARMOR_LASER)
 	{
 		QuadOffset = m_aPickupWeaponArmorOffset[pCurrent->m_Type - POWERUP_ARMOR_SHOTGUN];
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_aSpritePickupWeaponArmor[pCurrent->m_Type - POWERUP_ARMOR_SHOTGUN]);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemPickupArmors[pCurrent->m_Type - POWERUP_ARMOR_SHOTGUN]);
 	}
 	Graphics()->QuadsSetRotation(0);
 	Graphics()->SetColor(1.f, 1.f, 1.f, 1.f);
@@ -202,9 +202,9 @@ void CItems::RenderFlag(const CNetObj_Flag *pPrev, const CNetObj_Flag *pCurrent,
 	float Size = 42.0f;
 
 	if(pCurrent->m_Team == TEAM_RED)
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteFlagRed);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_RED]);
 	else
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteFlagBlue);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_BLUE]);
 	Graphics()->QuadsSetRotation(0);
 	Graphics()->SetColor(1.f, 1.f, 1.f, 1.f);
 	int QuadOffset;
@@ -347,7 +347,7 @@ void CItems::RenderLaser(const CLaserData *pCurrent, bool IsPredicted)
 	// render head
 	{
 		int CurParticle = (Client()->GameTick(g_Config.m_ClDummy) % 3);
-		Graphics()->TextureSet(GameClient()->m_ParticlesSkin.m_aSpriteParticleSplat[CurParticle]);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aParticleSplats[CurParticle]);
 		Graphics()->QuadsSetRotation(Client()->GameTick(g_Config.m_ClDummy));
 		Graphics()->SetColor(OuterColor.r, OuterColor.g, OuterColor.b, Alpha);
 		Graphics()->RenderQuadContainerAsSprite(m_ItemsQuadContainerIndex, m_aParticleSplatOffset[CurParticle], Pos.x, Pos.y);

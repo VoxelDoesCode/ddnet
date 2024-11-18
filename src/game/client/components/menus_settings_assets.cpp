@@ -114,7 +114,7 @@ static void LoadAsset(TName *pAssetItem, const char *pAssetName, IGraphics *pGra
 	char aPath[IO_MAX_PATH_LENGTH];
 	if(str_comp(pAssetItem->m_aName, "default") == 0)
 	{
-		str_format(aPath, sizeof(aPath), "%s.png", pAssetName);
+		str_format(aPath, sizeof(aPath), "images/%s_icon.png", pAssetName);
 		pAssetItem->m_RenderTexture = pGraphics->LoadTexture(aPath, IStorage::TYPE_ALL);
 	}
 	else

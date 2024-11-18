@@ -2809,17 +2809,17 @@ void CMenus::RenderSettingsAppearance(CUIRect MainView)
 			TextRender()->TextColor(TextRender()->DefaultTextColor());
 
 			// Left
-			Graphics()->TextureSet(g_pData->m_aImages[IMAGE_ARROW].m_Id);
+			Graphics()->TextureSet(GameClient()->m_Textures.m_aHudTextures[CTextures::HUD_ARROW]);
 			Graphics()->QuadsSetRotation(pi);
 			Graphics()->RenderQuadContainerAsSprite(m_DirectionQuadContainerIndex, 0, ShowDirectionPos.x - 30.f, ShowDirectionPos.y);
 
 			// Right
-			Graphics()->TextureSet(g_pData->m_aImages[IMAGE_ARROW].m_Id);
+			Graphics()->TextureSet(GameClient()->m_Textures.m_aHudTextures[CTextures::HUD_ARROW]);
 			Graphics()->QuadsSetRotation(0);
 			Graphics()->RenderQuadContainerAsSprite(m_DirectionQuadContainerIndex, 0, ShowDirectionPos.x + 30.f, ShowDirectionPos.y);
 
 			// Jump
-			Graphics()->TextureSet(g_pData->m_aImages[IMAGE_ARROW].m_Id);
+			Graphics()->TextureSet(GameClient()->m_Textures.m_aHudTextures[CTextures::HUD_ARROW]);
 			Graphics()->QuadsSetRotation(pi * 3 / 2);
 			Graphics()->RenderQuadContainerAsSprite(m_DirectionQuadContainerIndex, 0, ShowDirectionPos.x, ShowDirectionPos.y);
 

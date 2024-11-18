@@ -1045,7 +1045,7 @@ void CGameConsole::OnRender()
 	Graphics()->QuadsEnd();
 
 	// do background
-	Graphics()->TextureSet(g_pData->m_aImages[IMAGE_CONSOLE_BG].m_Id);
+	Graphics()->TextureSet(GameClient()->m_Textures.m_aGuiTextures[CTextures::GUI_CONSOLE]);
 	Graphics()->QuadsBegin();
 	Graphics()->SetColor(0.2f, 0.2f, 0.2f, 0.9f);
 	if(m_ConsoleType == CONSOLETYPE_REMOTE)
@@ -1069,7 +1069,7 @@ void CGameConsole::OnRender()
 	Graphics()->QuadsEnd();
 
 	// do the lower bar
-	Graphics()->TextureSet(g_pData->m_aImages[IMAGE_CONSOLE_BAR].m_Id);
+	Graphics()->TextureSet(GameClient()->m_Textures.m_aGuiTextures[CTextures::GUI_CONSOLE_BAR]);
 	Graphics()->QuadsBegin();
 	Graphics()->SetColor(1.0f, 1.0f, 1.0f, 0.9f);
 	Graphics()->QuadsSetSubset(0, 0.1f, Screen.w * 0.015f, 1 - 0.1f);

@@ -492,7 +492,7 @@ void CScoreboard::RenderScoreboard(CUIRect Scoreboard, int Team, int CountStart,
 				pGameDataObj && (pGameDataObj->m_FlagCarrierRed == pInfo->m_ClientId || pGameDataObj->m_FlagCarrierBlue == pInfo->m_ClientId))
 			{
 				Graphics()->BlendNormal();
-				Graphics()->TextureSet(pGameDataObj->m_FlagCarrierBlue == pInfo->m_ClientId ? GameClient()->m_GameSkin.m_SpriteFlagBlue : GameClient()->m_GameSkin.m_SpriteFlagRed);
+				Graphics()->TextureSet(pGameDataObj->m_FlagCarrierBlue == pInfo->m_ClientId ? GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_BLUE] : GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_RED]);
 				Graphics()->QuadsBegin();
 				Graphics()->QuadsSetSubset(1.0f, 0.0f, 0.0f, 1.0f);
 				IGraphics::CQuadItem QuadItem(TeeOffset, Row.y - 5.0f - Spacing / 2.0f, Row.h / 2.0f, Row.h);
