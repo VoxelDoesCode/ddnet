@@ -64,7 +64,7 @@ void CFreezeBars::RenderFreezeBarPos(float x, const float y, const float Width, 
 
 	// full
 	Graphics()->WrapClamp();
-	Graphics()->TextureSet(m_pClient->m_HudSkin.m_SpriteHudFreezeBarFullLeft);
+	Graphics()->TextureSet(m_pClient->m_Textures.m_aHudTextures[CTextures::HUD_FREEZE_BAR_FULL_LEFT]);
 	Graphics()->QuadsBegin();
 	Graphics()->SetColor(1.f, 1.f, 1.f, Alpha);
 	// Subset: top_l, top_m, btm_m, btm_l
@@ -76,7 +76,7 @@ void CFreezeBars::RenderFreezeBarPos(float x, const float y, const float Width, 
 	// empty
 	if(BeginningPieceProgress < 1.0f)
 	{
-		Graphics()->TextureSet(m_pClient->m_HudSkin.m_SpriteHudFreezeBarEmptyRight);
+		Graphics()->TextureSet(m_pClient->m_Textures.m_aHudTextures[CTextures::HUD_FREEZE_BAR_EMPTY_RIGHT]);
 		Graphics()->QuadsBegin();
 		Graphics()->SetColor(1.f, 1.f, 1.f, Alpha);
 		// Subset: top_m, top_l, btm_l, btm_m | it is mirrored on the horizontal axe and rotated 180 degrees
@@ -106,7 +106,7 @@ void CFreezeBars::RenderFreezeBarPos(float x, const float y, const float Width, 
 	const float EmptyMiddleBarWidth = MiddleBarWidth - FullMiddleBarWidth;
 
 	// full freeze bar
-	Graphics()->TextureSet(m_pClient->m_HudSkin.m_SpriteHudFreezeBarFull);
+	Graphics()->TextureSet(m_pClient->m_Textures.m_aHudTextures[CTextures::HUD_FREEZE_BAR_FULL]);
 	Graphics()->QuadsBegin();
 	Graphics()->SetColor(1.f, 1.f, 1.f, Alpha);
 	// select the middle portion of the sprite so we don't get edge bleeding
@@ -126,7 +126,7 @@ void CFreezeBars::RenderFreezeBarPos(float x, const float y, const float Width, 
 	Graphics()->QuadsEnd();
 
 	// empty freeze bar
-	Graphics()->TextureSet(m_pClient->m_HudSkin.m_SpriteHudFreezeBarEmpty);
+	Graphics()->TextureSet(m_pClient->m_Textures.m_aHudTextures[CTextures::HUD_FREEZE_BAR_EMPTY]);
 	Graphics()->QuadsBegin();
 	Graphics()->SetColor(1.f, 1.f, 1.f, Alpha);
 	// select the middle portion of the sprite so we don't get edge bleeding
@@ -163,7 +163,7 @@ void CFreezeBars::RenderFreezeBarPos(float x, const float y, const float Width, 
 	if(EndingPieceProgress > 0.0f)
 	{
 		// full
-		Graphics()->TextureSet(m_pClient->m_HudSkin.m_SpriteHudFreezeBarFullLeft);
+		Graphics()->TextureSet(m_pClient->m_Textures.m_aHudTextures[CTextures::HUD_FREEZE_BAR_FULL_LEFT]);
 		Graphics()->QuadsBegin();
 		Graphics()->SetColor(1.f, 1.f, 1.f, Alpha);
 		// Subset: top_r, top_m, btm_m, btm_r | it is mirrored on the horizontal axe and rotated 180 degrees
@@ -173,7 +173,7 @@ void CFreezeBars::RenderFreezeBarPos(float x, const float y, const float Width, 
 		Graphics()->QuadsEnd();
 	}
 	// empty
-	Graphics()->TextureSet(m_pClient->m_HudSkin.m_SpriteHudFreezeBarEmptyRight);
+	Graphics()->TextureSet(m_pClient->m_Textures.m_aHudTextures[CTextures::HUD_FREEZE_BAR_EMPTY_RIGHT]);
 	Graphics()->QuadsBegin();
 	Graphics()->SetColor(1.f, 1.f, 1.f, Alpha);
 	// Subset: top_m, top_r, btm_r, btm_m

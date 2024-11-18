@@ -299,12 +299,12 @@ void CInfoMessages::RenderKillMsg(const CInfoMsg &InfoMsg, float x, float y)
 		int QuadOffset;
 		if(InfoMsg.m_aVictimIds[0] == InfoMsg.m_FlagCarrierBlue)
 		{
-			Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteFlagBlue);
+			Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_BLUE]);
 			QuadOffset = 0;
 		}
 		else
 		{
-			Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteFlagRed);
+			Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_RED]);
 			QuadOffset = 1;
 		}
 		Graphics()->RenderQuadContainerAsSprite(m_SpriteQuadContainerIndex, QuadOffset, x, y - 16);
@@ -327,7 +327,7 @@ void CInfoMessages::RenderKillMsg(const CInfoMsg &InfoMsg, float x, float y)
 	x -= 32.0f;
 	if(InfoMsg.m_Weapon >= 0)
 	{
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_aSpriteWeapons[InfoMsg.m_Weapon]);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aWeaponBodies[InfoMsg.m_Weapon]);
 		Graphics()->RenderQuadContainerAsSprite(m_SpriteQuadContainerIndex, 4 + InfoMsg.m_Weapon, x, y + 28);
 	}
 	x -= 52.0f;
@@ -341,12 +341,12 @@ void CInfoMessages::RenderKillMsg(const CInfoMsg &InfoMsg, float x, float y)
 			int QuadOffset;
 			if(InfoMsg.m_KillerId == InfoMsg.m_FlagCarrierBlue)
 			{
-				Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteFlagBlue);
+				Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_BLUE]);
 				QuadOffset = 2;
 			}
 			else
 			{
-				Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteFlagRed);
+				Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_RED]);
 				QuadOffset = 3;
 			}
 			Graphics()->RenderQuadContainerAsSprite(m_SpriteQuadContainerIndex, QuadOffset, x - 56, y - 16);
@@ -391,7 +391,7 @@ void CInfoMessages::RenderFinishMsg(const CInfoMsg &InfoMsg, float x, float y)
 	// render flag
 	const float FlagSize = 52.0f;
 	x -= FlagSize;
-	Graphics()->TextureSet(g_pData->m_aImages[IMAGE_RACEFLAG].m_Id);
+	Graphics()->TextureSet(GameClient()->m_Textures.m_aHudTextures[CTextures::HUD_RACE_FLAG]);
 	Graphics()->QuadsBegin();
 	IGraphics::CQuadItem QuadItem(x, y, FlagSize, FlagSize);
 	Graphics()->QuadsDrawTL(&QuadItem, 1);

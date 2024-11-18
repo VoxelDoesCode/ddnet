@@ -101,20 +101,23 @@ CMenus::CMenus()
 
 int CMenus::DoButton_Toggle(const void *pId, int Checked, const CUIRect *pRect, bool Active)
 {
-	Graphics()->TextureSet(g_pData->m_aImages[IMAGE_GUIBUTTONS].m_Id);
+	Graphics()->TextureSet(GameClient()->m_Textures.m_aGuiTextures[Checked ? CTextures::GUI_BUTTON_ON : CTextures::GUI_BUTTON_OFF]);
 	Graphics()->QuadsBegin();
 	if(!Active)
 		Graphics()->SetColor(1.0f, 1.0f, 1.0f, 0.5f);
-	RenderTools()->SelectSprite(Checked ? SPRITE_GUIBUTTON_ON : SPRITE_GUIBUTTON_OFF);
+	// RenderTools()->SelectSprite(Checked ? SPRITE_GUIBUTTON_ON : SPRITE_GUIBUTTON_OFF);
 	IGraphics::CQuadItem QuadItem(pRect->x, pRect->y, pRect->w, pRect->h);
 	Graphics()->QuadsDrawTL(&QuadItem, 1);
+	Graphics()->QuadsEnd();
+
 	if(Ui()->HotItem() == pId && Active)
 	{
-		RenderTools()->SelectSprite(SPRITE_GUIBUTTON_HOVER);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aGuiTextures[CTextures::GUI_BUTTON_HOVER]);
+		Graphics()->QuadsBegin();
 		QuadItem = IGraphics::CQuadItem(pRect->x, pRect->y, pRect->w, pRect->h);
 		Graphics()->QuadsDrawTL(&QuadItem, 1);
+		Graphics()->QuadsEnd();
 	}
-	Graphics()->QuadsEnd();
 
 	return Active ? Ui()->DoButtonLogic(pId, Checked, pRect) : 0;
 }
@@ -332,7 +335,7 @@ void CMenus::DoLaserPreview(const CUIRect *pRect, const ColorHSLA LaserOutlineCo
 
 	Graphics()->BlendNormal();
 	int SpriteIndex = time_get() % 3;
-	Graphics()->TextureSet(GameClient()->m_ParticlesSkin.m_aSpriteParticleSplat[SpriteIndex]);
+	Graphics()->TextureSet(GameClient()->m_Textures.m_aParticleSplats[SpriteIndex]);
 	Graphics()->QuadsBegin();
 	Graphics()->QuadsSetRotation(time_get());
 	Graphics()->SetColor(OuterColor.r, OuterColor.g, OuterColor.b, 1.0f);
@@ -346,7 +349,7 @@ void CMenus::DoLaserPreview(const CUIRect *pRect, const ColorHSLA LaserOutlineCo
 	switch(LaserType)
 	{
 	case LASERTYPE_RIFLE:
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteWeaponLaser);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aWeaponBodies[WEAPON_LASER]);
 		RenderTools()->SelectSprite(SPRITE_WEAPON_LASER_BODY);
 		Graphics()->QuadsBegin();
 		Graphics()->QuadsSetSubset(0, 0, 1, 1);
@@ -354,7 +357,7 @@ void CMenus::DoLaserPreview(const CUIRect *pRect, const ColorHSLA LaserOutlineCo
 		Graphics()->QuadsEnd();
 		break;
 	case LASERTYPE_SHOTGUN:
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteWeaponShotgun);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aWeaponBodies[WEAPON_SHOTGUN]);
 		RenderTools()->SelectSprite(SPRITE_WEAPON_SHOTGUN_BODY);
 		Graphics()->QuadsBegin();
 		Graphics()->QuadsSetSubset(0, 0, 1, 1);
@@ -2275,7 +2278,7 @@ void CMenus::OnRender()
 
 	if(IsActive())
 	{
-		RenderTools()->RenderCursor(Ui()->MousePos(), 24.0f);
+		GameClient()->m_Textures.RenderCursor(Ui()->MousePos(), 24.0f);
 	}
 
 	// render debug information

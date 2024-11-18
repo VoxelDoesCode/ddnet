@@ -18,6 +18,7 @@
 
 #include <game/client/animstate.h>
 #include <game/client/components/countryflags.h>
+#include <game/client/components/emoticon.h>
 #include <game/client/gameclient.h>
 #include <game/client/render.h>
 #include <game/client/ui.h>
@@ -245,15 +246,15 @@ void CMenus::RenderPlayers(CUIRect MainView)
 	ButtonBar.HMargin(1.0f, &ButtonBar);
 	float Width = ButtonBar.h * 2.0f;
 	ButtonBar.VSplitLeft(Width, &Button, &ButtonBar);
-	RenderTools()->RenderIcon(IMAGE_GUIICONS, SPRITE_GUIICON_MUTE, &Button);
+	RenderTools()->RenderIcon(GameClient()->m_Textures.m_aGuiTextures[CTextures::GUI_ICON_MUTE], &Button);
 
 	ButtonBar.VSplitLeft(20.0f, nullptr, &ButtonBar);
 	ButtonBar.VSplitLeft(Width, &Button, &ButtonBar);
-	RenderTools()->RenderIcon(IMAGE_GUIICONS, SPRITE_GUIICON_EMOTICON_MUTE, &Button);
+	RenderTools()->RenderIcon(GameClient()->m_Textures.m_aGuiTextures[CTextures::GUI_ICON_EMOTICON_MUTE], &Button);
 
 	ButtonBar.VSplitLeft(20.0f, nullptr, &ButtonBar);
 	ButtonBar.VSplitLeft(Width, &Button, &ButtonBar);
-	RenderTools()->RenderIcon(IMAGE_GUIICONS, SPRITE_GUIICON_FRIEND, &Button);
+	RenderTools()->RenderIcon(GameClient()->m_Textures.m_aGuiTextures[CTextures::GUI_ICON_FRIEND], &Button);
 
 	int TotalPlayers = 0;
 	for(const auto &pInfoByName : m_pClient->m_Snap.m_apInfoByName)
@@ -1136,7 +1137,7 @@ void CMenus::RenderGhost(CUIRect MainView)
 				if(pGhost->Active())
 				{
 					Graphics()->WrapClamp();
-					Graphics()->TextureSet(GameClient()->m_EmoticonsSkin.m_aSpriteEmoticons[(SPRITE_OOP + 7) - SPRITE_OOP]);
+					Graphics()->TextureSet(GameClient()->m_Textures.EmoticonTexture(EMOTICON_GHOST));
 					Graphics()->QuadsBegin();
 					IGraphics::CQuadItem QuadItem(Button.x + Button.w / 2, Button.y + Button.h / 2, 20.0f, 20.0f);
 					Graphics()->QuadsDraw(&QuadItem, 1);

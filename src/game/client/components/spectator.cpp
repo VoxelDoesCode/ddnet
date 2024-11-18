@@ -561,9 +561,9 @@ void CSpectator::OnRender()
 		{
 			Graphics()->BlendNormal();
 			if(m_pClient->m_Snap.m_pGameDataObj->m_FlagCarrierBlue == m_pClient->m_Snap.m_apInfoByDDTeamName[i]->m_ClientId)
-				Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteFlagBlue);
+				Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_BLUE]);
 			else
-				Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteFlagRed);
+				Graphics()->TextureSet(GameClient()->m_Textures.m_aMapItemTextures[CTextures::MAPITEM_FLAG_RED]);
 
 			Graphics()->QuadsBegin();
 			Graphics()->QuadsSetSubset(1, 0, 0, 1);
@@ -596,7 +596,7 @@ void CSpectator::OnRender()
 	}
 	TextRender()->TextColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-	RenderTools()->RenderCursor(ScreenCenter + m_SelectorMouse, 48.0f);
+	GameClient()->m_Textures.RenderCursor(ScreenCenter + m_SelectorMouse, 48.0f);
 }
 
 void CSpectator::OnReset()

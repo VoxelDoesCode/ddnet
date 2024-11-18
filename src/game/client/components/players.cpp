@@ -17,6 +17,7 @@
 #include <game/client/render.h>
 
 #include <game/client/components/controls.h>
+#include <game/client/components/emoticon.h>
 #include <game/client/components/effects.h>
 #include <game/client/components/flow.h>
 #include <game/client/components/skins.h>
@@ -376,7 +377,7 @@ void CPlayers::RenderHook(
 		float d = distance(Pos, HookPos);
 		vec2 Dir = normalize(Pos - HookPos);
 
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteHookHead);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aWeaponTextures[CTextures::WEAPON_HOOK_HEAD]);
 		Graphics()->QuadsSetRotation(angle(Dir) + pi);
 		// render head
 		int QuadOffset = NUM_WEAPONS * 2 + 2;
@@ -395,7 +396,7 @@ void CPlayers::RenderHook(
 			s_aHookChainRenderInfo[HookChainCount].m_Scale = 1;
 			s_aHookChainRenderInfo[HookChainCount].m_Rotation = angle(Dir) + pi;
 		}
-		Graphics()->TextureSet(GameClient()->m_GameSkin.m_SpriteHookChain);
+		Graphics()->TextureSet(GameClient()->m_Textures.m_aWeaponTextures[CTextures::WEAPON_HOOK_CHAIN]);
 		Graphics()->RenderQuadContainerAsSpriteMultiple(m_WeaponEmoteQuadContainerIndex, QuadOffset, HookChainCount, s_aHookChainRenderInfo);
 
 		Graphics()->QuadsSetRotation(0);
@@ -418,6 +419,7 @@ void CPlayers::RenderPlayer(
 	Player = *pPlayerChar;
 
 	CTeeRenderInfo RenderInfo = *pRenderInfo;
+	CEmoticon Emoticon;
 
 	bool Local = m_pClient->m_Snap.m_LocalClientId == ClientId;
 	bool OtherTeam = m_pClient->IsOtherTeam(ClientId);
@@ -548,7 +550,7 @@ void CPlayers::RenderPlayer(
 
 			// normal weapons
 			int CurrentWeapon = clamp(Player.m_Weapon, 0, NUM_WEAPONS - 1);
-			Graphics()->TextureSet(GameClient()->m_GameSkin.m_aSpriteWeapons[CurrentWeapon]);
+			Graphics()->TextureSet(GameClient()->m_Textures.m_aWeaponBodies[CurrentWeapon]);
 			int QuadOffset = CurrentWeapon * 2 + (Direction.x < 0 ? 1 : 0);
 
 			Graphics()->SetColor(1.0f, 1.0f, 1.0f, Alpha);
@@ -643,7 +645,7 @@ void CPlayers::RenderPlayer(
 						WeaponPosition = Position;
 						float OffsetX = g_pData->m_Weapons.m_aId[CurrentWeapon].m_Muzzleoffsetx;
 						WeaponPosition -= Dir * OffsetX;
-						Graphics()->TextureSet(GameClient()->m_GameSkin.m_aaSpriteWeaponsMuzzles[CurrentWeapon][IteX]);
+						Graphics()->TextureSet(GameClient()->m_Textures.m_aaWeaponMuzzles[CurrentWeapon][IteX]);
 						Graphics()->RenderQuadContainerAsSprite(m_aWeaponSpriteMuzzleQuadContainerIndex[CurrentWeapon], QuadOffset, WeaponPosition.x, WeaponPosition.y);
 					}
 				}
@@ -702,7 +704,7 @@ void CPlayers::RenderPlayer(
 
 						vec2 DirY(-Dir.y, Dir.x);
 						vec2 MuzzlePos = WeaponPosition + Dir * g_pData->m_Weapons.m_aId[CurrentWeapon].m_Muzzleoffsetx + DirY * OffsetY;
-						Graphics()->TextureSet(GameClient()->m_GameSkin.m_aaSpriteWeaponsMuzzles[CurrentWeapon][IteX]);
+						Graphics()->TextureSet(GameClient()->m_Textures.m_aaWeaponMuzzles[CurrentWeapon][IteX]);
 						Graphics()->RenderQuadContainerAsSprite(m_aWeaponSpriteMuzzleQuadContainerIndex[CurrentWeapon], QuadOffset, MuzzlePos.x, MuzzlePos.y);
 					}
 				}
@@ -753,8 +755,8 @@ void CPlayers::RenderPlayer(
 	int QuadOffsetToEmoticon = NUM_WEAPONS * 2 + 2 + 2;
 	if((Player.m_PlayerFlags & PLAYERFLAG_CHATTING) && !m_pClient->m_aClients[ClientId].m_Afk)
 	{
-		int CurEmoticon = (SPRITE_DOTDOT - SPRITE_OOP);
-		Graphics()->TextureSet(GameClient()->m_EmoticonsSkin.m_aSpriteEmoticons[CurEmoticon]);
+		int CurEmoticon = (EMOTICON_DOTDOT);
+		Graphics()->TextureSet(GameClient()->m_Textures.EmoticonTexture(CurEmoticon));
 		int QuadOffset = QuadOffsetToEmoticon + CurEmoticon;
 		Graphics()->SetColor(1.0f, 1.0f, 1.0f, Alpha);
 		Graphics()->RenderQuadContainerAsSprite(m_WeaponEmoteQuadContainerIndex, QuadOffset, Position.x + 24.f, Position.y - 40.f);
@@ -765,8 +767,8 @@ void CPlayers::RenderPlayer(
 
 	if(g_Config.m_ClAfkEmote && m_pClient->m_aClients[ClientId].m_Afk && !(Client()->DummyConnected() && ClientId == m_pClient->m_aLocalIds[!g_Config.m_ClDummy]))
 	{
-		int CurEmoticon = (SPRITE_ZZZ - SPRITE_OOP);
-		Graphics()->TextureSet(GameClient()->m_EmoticonsSkin.m_aSpriteEmoticons[CurEmoticon]);
+		int CurEmoticon = (EMOTICON_ZZZ);
+		Graphics()->TextureSet(GameClient()->m_Textures.EmoticonTexture(CurEmoticon));
 		int QuadOffset = QuadOffsetToEmoticon + CurEmoticon;
 		Graphics()->SetColor(1.0f, 1.0f, 1.0f, Alpha);
 		Graphics()->RenderQuadContainerAsSprite(m_WeaponEmoteQuadContainerIndex, QuadOffset, Position.x + 24.f, Position.y - 40.f);
@@ -802,7 +804,7 @@ void CPlayers::RenderPlayer(
 			Graphics()->SetColor(1.0f, 1.0f, 1.0f, a * Alpha);
 			// client_datas::emoticon is an offset from the first emoticon
 			int QuadOffset = QuadOffsetToEmoticon + m_pClient->m_aClients[ClientId].m_Emoticon;
-			Graphics()->TextureSet(GameClient()->m_EmoticonsSkin.m_aSpriteEmoticons[m_pClient->m_aClients[ClientId].m_Emoticon]);
+			Graphics()->TextureSet(GameClient()->m_Textures.EmoticonTexture(m_pClient->m_aClients[ClientId].m_Emoticon));
 			Graphics()->RenderQuadContainerAsSprite(m_WeaponEmoteQuadContainerIndex, QuadOffset, Position.x, Position.y - 23.f - 32.f * h, 1.f, (64.f * h) / 64.f);
 
 			Graphics()->SetColor(1.0f, 1.0f, 1.0f, 1.0f);

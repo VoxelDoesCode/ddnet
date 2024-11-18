@@ -26,7 +26,7 @@ void CEffects::AirJump(vec2 Pos, float Alpha)
 {
 	CParticle p;
 	p.SetDefault();
-	p.m_Spr = SPRITE_PART_AIRJUMP;
+	p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_AIR_JUMP;
 	p.m_Pos = Pos + vec2(-6.0f, 16.0f);
 	p.m_Vel = vec2(0, -200);
 	p.m_LifeSpan = 0.5f;
@@ -60,7 +60,7 @@ void CEffects::PowerupShine(vec2 Pos, vec2 Size, float Alpha)
 
 	CParticle p;
 	p.SetDefault();
-	p.m_Spr = SPRITE_PART_SLICE;
+	p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SLICE;
 	p.m_Pos = Pos + vec2(random_float(-0.5f, 0.5f), random_float(-0.5f, 0.5f)) * Size;
 	p.m_Vel = vec2(0, 0);
 	p.m_LifeSpan = 0.5f;
@@ -83,7 +83,7 @@ void CEffects::FreezingFlakes(vec2 Pos, vec2 Size, float Alpha)
 
 	CParticle p;
 	p.SetDefault();
-	p.m_Spr = SPRITE_PART_SNOWFLAKE;
+	p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SNOWFLAKE;
 	p.m_Pos = Pos + vec2(random_float(-0.5f, 0.5f), random_float(-0.5f, 0.5f)) * Size;
 	p.m_Vel = vec2(0, 0);
 	p.m_LifeSpan = 1.5f;
@@ -110,7 +110,7 @@ void CEffects::SparkleTrail(vec2 Pos, float Alpha)
 
 	CParticle p;
 	p.SetDefault();
-	p.m_Spr = SPRITE_PART_SPARKLE;
+	p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SPARKLE;
 	p.m_Pos = Pos + random_direction() * random_float(40.0f);
 	p.m_Vel = vec2(0, 0);
 	p.m_LifeSpan = 0.5f;
@@ -130,7 +130,7 @@ void CEffects::SmokeTrail(vec2 Pos, vec2 Vel, float Alpha, float TimePassed)
 
 	CParticle p;
 	p.SetDefault();
-	p.m_Spr = SPRITE_PART_SMOKE;
+	p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SMOKE;
 	p.m_Pos = Pos;
 	p.m_Vel = Vel + random_direction() * 50.0f;
 	p.m_LifeSpan = random_float(0.5f, 1.0f);
@@ -150,7 +150,7 @@ void CEffects::SkidTrail(vec2 Pos, vec2 Vel, float Alpha)
 
 	CParticle p;
 	p.SetDefault();
-	p.m_Spr = SPRITE_PART_SMOKE;
+	p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SMOKE;
 	p.m_Pos = Pos;
 	p.m_Vel = Vel + random_direction() * 50.0f;
 	p.m_LifeSpan = random_float(0.5f, 1.0f);
@@ -170,7 +170,7 @@ void CEffects::BulletTrail(vec2 Pos, float Alpha, float TimePassed)
 
 	CParticle p;
 	p.SetDefault();
-	p.m_Spr = SPRITE_PART_BALL;
+	p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_BALL;
 	p.m_Pos = Pos;
 	p.m_LifeSpan = random_float(0.25f, 0.5f);
 	p.m_StartSize = 8.0f;
@@ -187,7 +187,7 @@ void CEffects::PlayerSpawn(vec2 Pos, float Alpha)
 	{
 		CParticle p;
 		p.SetDefault();
-		p.m_Spr = SPRITE_PART_SHELL;
+		p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SHELL;
 		p.m_Pos = Pos;
 		p.m_Vel = random_direction() * (std::pow(random_float(), 3) * 600.0f);
 		p.m_LifeSpan = random_float(0.3f, 0.6f);
@@ -229,7 +229,7 @@ void CEffects::PlayerDeath(vec2 Pos, int ClientId, float Alpha)
 	{
 		CParticle p;
 		p.SetDefault();
-		p.m_Spr = SPRITE_PART_SPLAT01 + (rand() % 3);
+		p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SPLAT_1 + (rand() % 3);
 		p.m_Pos = Pos;
 		p.m_Vel = random_direction() * (random_float(0.1f, 1.1f) * 900.0f);
 		p.m_LifeSpan = random_float(0.3f, 0.6f);
@@ -262,7 +262,7 @@ void CEffects::Confetti(vec2 Pos, float Alpha)
 	{
 		CParticle p;
 		p.SetDefault();
-		p.m_Spr = SPRITE_PART_SPLAT01 + (rand() % 3);
+		p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SPLAT_1 + (rand() % 3);
 		p.m_Pos = Pos;
 		p.m_Vel = direction(-0.5f * pi + random_float(-0.2f, 0.2f)) * random_float(0.01f, 1.0f) * 2000.0f;
 		p.m_LifeSpan = random_float(1.0f, 1.2f);
@@ -283,7 +283,7 @@ void CEffects::Confetti(vec2 Pos, float Alpha)
 	{
 		CParticle p;
 		p.SetDefault();
-		p.m_Spr = SPRITE_PART_SPLAT01 + (rand() % 3);
+		p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SPLAT_1 + (rand() % 3);
 		p.m_Pos = Pos;
 		p.m_Vel = direction(-0.5f * pi + random_float(-0.8f, 0.8f)) * random_float(0.01f, 1.0f) * 1500.0f;
 		p.m_LifeSpan = random_float(0.8f, 1.0f);
@@ -316,7 +316,7 @@ void CEffects::Explosion(vec2 Pos, float Alpha)
 	// add the explosion
 	CParticle p;
 	p.SetDefault();
-	p.m_Spr = SPRITE_PART_EXPL01;
+	p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_EXPLOSION_1;
 	p.m_Pos = Pos;
 	p.m_LifeSpan = 0.4f;
 	p.m_StartSize = 150.0f;
@@ -352,7 +352,7 @@ void CEffects::Explosion(vec2 Pos, float Alpha)
 	for(int i = 0; i < 24; i++)
 	{
 		p.SetDefault();
-		p.m_Spr = SPRITE_PART_SMOKE;
+		p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_SMOKE;
 		p.m_Pos = Pos;
 		p.m_Vel = random_direction() * (random_float(1.0f, 1.2f) * 1000.0f);
 		p.m_LifeSpan = random_float(0.5f, 0.9f);
@@ -372,7 +372,7 @@ void CEffects::HammerHit(vec2 Pos, float Alpha)
 	// add the explosion
 	CParticle p;
 	p.SetDefault();
-	p.m_Spr = SPRITE_PART_HIT01;
+	p.m_Spr = GameClient()->m_Textures.EParticleTextures::PARTICLE_HIT_01;
 	p.m_Pos = Pos;
 	p.m_LifeSpan = 0.3f;
 	p.m_StartSize = 120.0f;

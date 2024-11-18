@@ -5,6 +5,7 @@
 #include <base/math.h>
 
 #include "animstate.h"
+#include "gameclient.h"
 #include "render.h"
 
 #include <engine/graphics.h>
@@ -126,19 +127,18 @@ void CRenderTools::DrawSprite(float x, float y, float ScaledWidth, float ScaledH
 	Graphics()->QuadsDraw(&QuadItem, 1);
 }
 
-void CRenderTools::RenderCursor(vec2 Center, float Size) const
+void CRenderTools::RenderIcon(IGraphics::CTextureHandle Image, const CUIRect *pRect, const ColorRGBA *pColor) const
 {
-	Graphics()->WrapClamp();
-	Graphics()->TextureSet(g_pData->m_aImages[IMAGE_CURSOR].m_Id);
+	Graphics()->TextureSet(Image);
 	Graphics()->QuadsBegin();
-	Graphics()->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-	IGraphics::CQuadItem QuadItem(Center.x, Center.y, Size, Size);
+	if(pColor)
+		Graphics()->SetColor(pColor->r * pColor->a, pColor->g * pColor->a, pColor->b * pColor->a, pColor->a);
+	IGraphics::CQuadItem QuadItem(pRect->x, pRect->y, pRect->w, pRect->h);
 	Graphics()->QuadsDrawTL(&QuadItem, 1);
 	Graphics()->QuadsEnd();
-	Graphics()->WrapNormal();
 }
 
-void CRenderTools::RenderIcon(int ImageId, int SpriteId, const CUIRect *pRect, const ColorRGBA *pColor) const
+void CRenderTools::RenderIconOld(int ImageId, int SpriteId, const CUIRect *pRect, const ColorRGBA *pColor) const
 {
 	Graphics()->TextureSet(g_pData->m_aImages[ImageId].m_Id);
 	Graphics()->QuadsBegin();

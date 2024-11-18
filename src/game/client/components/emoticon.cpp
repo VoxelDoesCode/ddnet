@@ -4,6 +4,7 @@
 #include <engine/shared/config.h>
 #include <game/generated/protocol.h>
 
+#include <base/log.h>
 #include "chat.h"
 #include "emoticon.h"
 #include <game/client/animstate.h>
@@ -156,7 +157,7 @@ void CEmoticon::OnRender()
 		if(Angle > pi)
 			Angle -= 2 * pi;
 
-		Graphics()->TextureSet(GameClient()->m_EmoticonsSkin.m_aSpriteEmoticons[Emote]);
+		Graphics()->TextureSet(GameClient()->m_Textures.EmoticonTexture(Emote));
 		Graphics()->QuadsSetSubset(0, 0, 1, 1);
 		Graphics()->QuadsBegin();
 		const vec2 Nudge = direction(Angle) * 150.0f;
@@ -197,7 +198,7 @@ void CEmoticon::OnRender()
 	else
 		m_SelectedEyeEmote = -1;
 
-	RenderTools()->RenderCursor(ScreenCenter + m_SelectorMouse, 24.0f);
+	GameClient()->m_Textures.RenderCursor(ScreenCenter + m_SelectorMouse, 24.0f);
 }
 
 void CEmoticon::Emote(int Emoticon)
