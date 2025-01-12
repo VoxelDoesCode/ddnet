@@ -397,7 +397,7 @@ const char *CAutoMapper::GetConfigName(int Index)
 	return m_vConfigs[Index].m_aName;
 }
 
-void CAutoMapper::ProceedLocalized(CLayerTiles *pLayer, int ConfigId, int Seed, int X, int Y, int Width, int Height)
+void CAutoMapper::ProceedLocalized(CLayerTiles *pLayer, class CLayerTiles *pReference, int ConfigId, int Seed, int X, int Y, int Width, int Height)
 {
 	if(!m_FileLoaded || pLayer->m_Readonly || ConfigId < 0 || ConfigId >= (int)m_vConfigs.size())
 		return;
@@ -433,7 +433,7 @@ void CAutoMapper::ProceedLocalized(CLayerTiles *pLayer, int ConfigId, int Seed, 
 		}
 	}
 
-	Proceed(pUpdateLayer, ConfigId, Seed, UpdateFromX, UpdateFromY);
+	Proceed(pUpdateLayer, pReference, ConfigId, Seed, UpdateFromX, UpdateFromY);
 
 	for(int y = CommitFromY; y < CommitToY; y++)
 	{
@@ -451,7 +451,7 @@ void CAutoMapper::ProceedLocalized(CLayerTiles *pLayer, int ConfigId, int Seed, 
 	delete pUpdateLayer;
 }
 
-void CAutoMapper::Proceed(CLayerTiles *pLayer, int ConfigId, int Seed, int SeedOffsetX, int SeedOffsetY)
+void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pReference, int ConfigId, int Seed, int SeedOffsetX, int SeedOffsetY)
 {
 	if(!m_FileLoaded || pLayer->m_Readonly || ConfigId < 0 || ConfigId >= (int)m_vConfigs.size())
 		return;
@@ -462,6 +462,10 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, int ConfigId, int Seed, int SeedO
 	CConfiguration *pConf = &m_vConfigs[ConfigId];
 	pLayer->ClearHistory();
 
+	int layerWidth = pLayer->m_Width;
+	int layerHeight = pLayer->m_Height;
+	bool sameLayers = pLayer == pReference;
+
 	// for every run: copy tiles, automap, overwrite tiles
 	for(size_t h = 0; h < pConf->m_vRuns.size(); ++h)
 	{
@@ -469,16 +473,17 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, int ConfigId, int Seed, int SeedO
 
 		// don't make copy if it's requested
 		CLayerTiles *pReadLayer;
+		CLayerTiles *pBuffer = (h == 0) ? pReference : pLayer;
 		if(pRun->m_AutomapCopy)
 		{
-			pReadLayer = new CLayerTiles(Editor(), pLayer->m_Width, pLayer->m_Height);
+			pReadLayer = new CLayerTiles(Editor(), layerWidth, layerHeight);
 
-			for(int y = 0; y < pLayer->m_Height; y++)
+			for(int y = 0; y < layerHeight; y++)
 			{
-				for(int x = 0; x < pLayer->m_Width; x++)
+				for(int x = 0; x < layerWidth; x++)
 				{
-					CTile *pIn = &pLayer->m_pTiles[y * pLayer->m_Width + x];
-					CTile *pOut = &pReadLayer->m_pTiles[y * pLayer->m_Width + x];
+					CTile *pIn = &pBuffer->m_pTiles[y * layerWidth + x];
+					CTile *pOut = &pReadLayer->m_pTiles[y * layerWidth + x];
 					pOut->m_Index = pIn->m_Index;
 					pOut->m_Flags = pIn->m_Flags;
 				}
@@ -486,23 +491,36 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, int ConfigId, int Seed, int SeedO
 		}
 		else
 		{
-			pReadLayer = pLayer;
+			pReadLayer = pBuffer;
 		}
 
 		// auto map
-		for(int y = 0; y < pLayer->m_Height; y++)
+		for(int y = 0; y < layerHeight; y++)
 		{
-			for(int x = 0; x < pLayer->m_Width; x++)
+			for(int x = 0; x < layerWidth; x++)
 			{
-				CTile *pTile = &(pLayer->m_pTiles[y * pLayer->m_Width + x]);
-				const CTile *pReadTile = &(pReadLayer->m_pTiles[y * pLayer->m_Width + x]);
+				CTile *pTile = &(pLayer->m_pTiles[y * layerWidth + x]);
+				const CTile *pReadTile = &(pReadLayer->m_pTiles[y * layerWidth + x]);
 				Editor()->m_Map.OnModify();
 
 				for(size_t i = 0; i < pRun->m_vIndexRules.size(); ++i)
 				{
 					CIndexRule *pIndexRule = &pRun->m_vIndexRules[i];
-					if(pIndexRule->m_SkipEmpty && pReadTile->m_Index == 0) // skip empty tiles
-						continue;
+					if(pReadTile->m_Index == 0)
+					{
+						if (pTile->m_Index != 0 && h == 0 && !sameLayers) // TODO: This is a lazy workaround
+						{
+							CTile Previous = *pTile;
+							pTile->m_Index = 0;
+							pTile->m_Flags = pIndexRule->m_Flag;
+							pLayer->RecordStateChange(x, y, Previous, *pTile);
+							continue;
+						}
+
+						if(pIndexRule->m_SkipEmpty) // skip empty tiles
+							continue;
+
+					}
 					if(pIndexRule->m_SkipFull && pReadTile->m_Index != 0) // skip full tiles
 						continue;
 
@@ -514,9 +532,9 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, int ConfigId, int Seed, int SeedO
 						int CheckIndex, CheckFlags;
 						int CheckX = x + pRule->m_X;
 						int CheckY = y + pRule->m_Y;
-						if(CheckX >= 0 && CheckX < pLayer->m_Width && CheckY >= 0 && CheckY < pLayer->m_Height)
+						if(CheckX >= 0 && CheckX < layerWidth && CheckY >= 0 && CheckY < layerHeight)
 						{
-							int CheckTile = CheckY * pLayer->m_Width + CheckX;
+							int CheckTile = CheckY * layerWidth + CheckX;
 							CheckIndex = pReadLayer->m_pTiles[CheckTile].m_Index;
 							CheckFlags = pReadLayer->m_pTiles[CheckTile].m_Flags & (TILEFLAG_ROTATE | TILEFLAG_XFLIP | TILEFLAG_YFLIP);
 						}
