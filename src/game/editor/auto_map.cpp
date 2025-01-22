@@ -397,7 +397,7 @@ const char *CAutoMapper::GetConfigName(int Index)
 	return m_vConfigs[Index].m_aName;
 }
 
-void CAutoMapper::ProceedLocalized(CLayerTiles *pLayer, class CLayerTiles *pReference, int ConfigId, int Seed, int X, int Y, int Width, int Height)
+void CAutoMapper::ProceedLocalized(CLayerTiles *pLayer, class CLayerTiles *pGameLayer, int ReferenceId, int ConfigId, int Seed, int X, int Y, int Width, int Height)
 {
 	if(!m_FileLoaded || pLayer->m_Readonly || ConfigId < 0 || ConfigId >= (int)m_vConfigs.size())
 		return;
@@ -433,7 +433,7 @@ void CAutoMapper::ProceedLocalized(CLayerTiles *pLayer, class CLayerTiles *pRefe
 		}
 	}
 
-	Proceed(pUpdateLayer, pReference, ConfigId, Seed, UpdateFromX, UpdateFromY);
+	Proceed(pUpdateLayer, pGameLayer, ReferenceId, ConfigId, Seed, UpdateFromX, UpdateFromY);
 
 	for(int y = CommitFromY; y < CommitToY; y++)
 	{
@@ -451,7 +451,7 @@ void CAutoMapper::ProceedLocalized(CLayerTiles *pLayer, class CLayerTiles *pRefe
 	delete pUpdateLayer;
 }
 
-void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pReference, int ConfigId, int Seed, int SeedOffsetX, int SeedOffsetY)
+void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pGameLayer, int ReferenceId, int ConfigId, int Seed, int SeedOffsetX, int SeedOffsetY)
 {
 	if(!m_FileLoaded || pLayer->m_Readonly || ConfigId < 0 || ConfigId >= (int)m_vConfigs.size())
 		return;
@@ -464,16 +464,18 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pReference, int Conf
 
 	int layerWidth = pLayer->m_Width;
 	int layerHeight = pLayer->m_Height;
-	bool sameLayers = pLayer == pReference;
+
+	static const int s_aTileIndex[6] = {TILE_SOLID, TILE_DEATH, TILE_NOHOOK, TILE_THROUGH_CUT, TILE_FREEZE, TILE_UNFREEZE};
 
 	// for every run: copy tiles, automap, overwrite tiles
 	for(size_t h = 0; h < pConf->m_vRuns.size(); ++h)
 	{
 		CRun *pRun = &pConf->m_vRuns[h];
+		bool IsFilterable = h == 0 && ReferenceId >= 0;
 
 		// don't make copy if it's requested
 		CLayerTiles *pReadLayer;
-		CLayerTiles *pBuffer = (h == 0) ? pReference : pLayer;
+		CLayerTiles *pBuffer = IsFilterable ? pGameLayer : pLayer;
 		if(pRun->m_AutomapCopy)
 		{
 			pReadLayer = new CLayerTiles(Editor(), layerWidth, layerHeight);
@@ -484,7 +486,10 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pReference, int Conf
 				{
 					CTile *pIn = &pBuffer->m_pTiles[y * layerWidth + x];
 					CTile *pOut = &pReadLayer->m_pTiles[y * layerWidth + x];
-					pOut->m_Index = pIn->m_Index;
+					if(h == 0 && ReferenceId >= 1 && pIn->m_Index != s_aTileIndex[ReferenceId - 1])
+						pOut->m_Index = 0;
+					else
+						pOut->m_Index = pIn->m_Index;
 					pOut->m_Flags = pIn->m_Flags;
 				}
 			}
@@ -508,7 +513,7 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pReference, int Conf
 					CIndexRule *pIndexRule = &pRun->m_vIndexRules[i];
 					if(pReadTile->m_Index == 0)
 					{
-						if (pTile->m_Index != 0 && h == 0 && !sameLayers) // TODO: This is a lazy workaround
+						if(pTile->m_Index != 0 && IsFilterable) // TODO: This is a lazy workaround
 						{
 							CTile Previous = *pTile;
 							pTile->m_Index = 0;
@@ -519,7 +524,6 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pReference, int Conf
 
 						if(pIndexRule->m_SkipEmpty) // skip empty tiles
 							continue;
-
 					}
 					if(pIndexRule->m_SkipFull && pReadTile->m_Index != 0) // skip full tiles
 						continue;

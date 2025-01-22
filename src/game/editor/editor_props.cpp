@@ -223,7 +223,7 @@ SEditResult<E> CEditor::DoPropertiesWithState(CUIRect *pToolBox, CProperty *pPro
 			if(pProps[i].m_Value < 0)
 				pName = "None";
 			else
-				pName = g_apAutoRefOpNames[pProps[i].m_Value];
+				pName = g_apAutoMapReferenceNames[pProps[i].m_Value];
 
 			if(DoButton_Ex(&pIds[i], pName, 0, &Shifter, 0, nullptr, IGraphics::CORNER_ALL))
 				PopupSelectAutoMapReferenceInvoke(pProps[i].m_Value, Ui()->MouseX(), Ui()->MouseY());
