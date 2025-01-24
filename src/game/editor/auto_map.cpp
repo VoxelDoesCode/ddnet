@@ -323,6 +323,15 @@ void CAutoMapper::Load(const char *pTileName)
 					pCurrentIndex->m_RandomProbability = 1.0f / Value;
 				}
 			}
+			else if(str_startswith(pLine, "Modulo") && pCurrentIndex)
+			{
+				int ModX = 0, ModY = 0, OffsetX = 0, OffsetY = 0;
+				sscanf(pLine, "Modulo %d %d %d %d", &ModX, &ModY, &OffsetX, &OffsetY);
+				if(ModX == 0) ModX = 1;
+				if(ModY == 0) ModY = 1;
+				CModuloRule NewModuloRule = {ModX, ModY, OffsetX, OffsetY};
+				pCurrentIndex->m_vModuloRules.push_back(NewModuloRule);
+			}
 			else if(str_startswith(pLine, "NoDefaultRule") && pCurrentIndex)
 			{
 				pCurrentIndex->m_DefaultRule = false;
@@ -573,7 +582,17 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pGameLayer, int Refe
 						}
 					}
 
-					if(RespectRules &&
+					bool RespectModulo = pIndexRule->m_vModuloRules.size() == 0;
+					for(size_t k = 0; k < pIndexRule->m_vModuloRules.size() && RespectRules; ++k)
+					{
+						CModuloRule *pModuloRule = &pIndexRule->m_vModuloRules[k];
+						if((x + pModuloRule->m_OffsetX) % pModuloRule->m_ModX == 0 && (y + pModuloRule->m_OffsetY) % pModuloRule->m_ModY == 0)
+						{
+							RespectModulo = true;
+						}
+					}
+
+					if(RespectRules && RespectModulo &&
 						(pIndexRule->m_RandomProbability >= 1.0f || HashLocation(Seed, h, i, x + SeedOffsetX, y + SeedOffsetY) < HASH_MAX * pIndexRule->m_RandomProbability))
 					{
 						CTile Previous = *pTile;
