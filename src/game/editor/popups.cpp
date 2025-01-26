@@ -2491,7 +2491,7 @@ CUi::EPopupMenuFunctionResult CEditor::PopupSelectAutoMapReference(void *pContex
 	s_ListBox.DoStart(ButtonHeight, std::size(s_apAutoMapReferenceButtonNames) + 1, 1, 4, s_AutoMapReferenceCurrent + 1, &View, false);
 	s_ListBox.DoAutoSpacing(ButtonMargin);
 
-	for(int i = 0; i < std::size(s_apAutoMapReferenceButtonNames) + 1; i++)
+	for(int i = 0; i < static_cast<int>(std::size(s_apAutoMapReferenceButtonNames)) + 1; i++)
 	{
 		static int s_NoneButton = 0;
 		CListboxItem Item = s_ListBox.DoNextItem(i == 0 ? (void *)&s_NoneButton : s_apAutoMapReferenceButtonNames[i - 1], (i - 1) == s_AutoMapReferenceCurrent, 3.0f);
