@@ -436,34 +436,62 @@ void CAutoMapper::ProceedLocalized(CLayerTiles *pLayer, CLayerTiles *pGameLayer,
 	int UpdateToY = clamp(Y + Height + 3 * pConf->m_EndY, 0, pLayer->m_Height);
 
 	CLayerTiles *pUpdateLayer = new CLayerTiles(Editor(), UpdateToX - UpdateFromX, UpdateToY - UpdateFromY);
+	CLayerTiles *pUpdateGame = new CLayerTiles(Editor(), UpdateToX - UpdateFromX, UpdateToY - UpdateFromY);
+	CLayerTiles *pUpdateGuide = new CLayerTiles(Editor(), UpdateToX - UpdateFromX, UpdateToY - UpdateFromY);
 
 	for(int y = UpdateFromY; y < UpdateToY; y++)
 	{
 		for(int x = UpdateFromX; x < UpdateToX; x++)
 		{
-			CTile *pIn = &pLayer->m_pTiles[y * pLayer->m_Width + x];
-			CTile *pOut = &pUpdateLayer->m_pTiles[(y - UpdateFromY) * pUpdateLayer->m_Width + x - UpdateFromX];
-			pOut->m_Index = pIn->m_Index;
-			pOut->m_Flags = pIn->m_Flags;
+			CTile *pInLayer = &pLayer->m_pTiles[y * pLayer->m_Width + x];
+			CTile *pOutLayer = &pUpdateLayer->m_pTiles[(y - UpdateFromY) * pUpdateLayer->m_Width + x - UpdateFromX];
+			pOutLayer->m_Index = pInLayer->m_Index;
+			pOutLayer->m_Flags = pInLayer->m_Flags;
+
+			CTile *pInGame = &pGameLayer->m_pTiles[y * pGameLayer->m_Width + x];
+			CTile *pOutGame = &pUpdateGame->m_pTiles[(y - UpdateFromY) * pUpdateGame->m_Width + x - UpdateFromX];
+			pOutGame->m_Index = pInGame->m_Index;
+			pOutGame->m_Flags = pInGame->m_Flags;
+
+			CTile *pInGuide = &pGuideLayer->m_pTiles[y * pGuideLayer->m_Width + x];
+			CTile *pOutGuide = &pUpdateGuide->m_pTiles[(y - UpdateFromY) * pUpdateGuide->m_Width + x - UpdateFromX];
+			pOutGuide->m_Index = pInGuide->m_Index;
+			pOutGuide->m_Flags = pInGuide->m_Flags;
 		}
 	}
 
-	Proceed(pUpdateLayer, pGameLayer, pGuideLayer, ReferenceId, ConfigId, Seed, UpdateFromX, UpdateFromY);
+	Proceed(pUpdateLayer, pUpdateGame, pUpdateGuide, ReferenceId, ConfigId, Seed, UpdateFromX, UpdateFromY);
 
 	for(int y = CommitFromY; y < CommitToY; y++)
 	{
 		for(int x = CommitFromX; x < CommitToX; x++)
 		{
-			CTile *pIn = &pUpdateLayer->m_pTiles[(y - UpdateFromY) * pUpdateLayer->m_Width + x - UpdateFromX];
-			CTile *pOut = &pLayer->m_pTiles[y * pLayer->m_Width + x];
-			CTile Previous = *pOut;
-			pOut->m_Index = pIn->m_Index;
-			pOut->m_Flags = pIn->m_Flags;
-			pLayer->RecordStateChange(x, y, Previous, *pOut);
+			CTile *pInLayer = &pUpdateLayer->m_pTiles[(y - UpdateFromY) * pUpdateLayer->m_Width + x - UpdateFromX];
+			CTile *pOutLayer = &pLayer->m_pTiles[y * pLayer->m_Width + x];
+			CTile PreviousLayer = *pOutLayer;
+			pOutLayer->m_Index = pInLayer->m_Index;
+			pOutLayer->m_Flags = pInLayer->m_Flags;
+			pLayer->RecordStateChange(x, y, PreviousLayer, *pOutLayer);
+
+			CTile *pInGame = &pUpdateGame->m_pTiles[(y - UpdateFromY) * pUpdateGame->m_Width + x - UpdateFromX];
+			CTile *pOutGame = &pGameLayer->m_pTiles[y * pGameLayer->m_Width + x];
+			CTile PreviousGame = *pOutGame;
+			pOutGame->m_Index = pInGame->m_Index;
+			pOutGame->m_Flags = pInGame->m_Flags;
+			pGameLayer->RecordStateChange(x, y, PreviousGame, *pOutGame);
+
+			CTile *pInGuide = &pUpdateGuide->m_pTiles[(y - UpdateFromY) * pUpdateGuide->m_Width + x - UpdateFromX];
+			CTile *pOutGuide = &pGuideLayer->m_pTiles[y * pGuideLayer->m_Width + x];
+			CTile PreviousGuide = *pOutGuide;
+			pOutGuide->m_Index = pInGuide->m_Index;
+			pOutGuide->m_Flags = pInGuide->m_Flags;
+			pGuideLayer->RecordStateChange(x, y, PreviousGuide, *pOutGuide);
 		}
 	}
 
 	delete pUpdateLayer;
+	delete pUpdateGame;
+	delete pUpdateGuide;
 }
 
 void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pGameLayer, CLayerTiles *pGuideLayer, int ReferenceId, int ConfigId, int Seed, int SeedOffsetX, int SeedOffsetY)
@@ -600,7 +628,7 @@ void CAutoMapper::Proceed(CLayerTiles *pLayer, CLayerTiles *pGameLayer, CLayerTi
 					for(size_t k = 0; k < pIndexRule->m_vModuloRules.size() && RespectRules; ++k)
 					{
 						CModuloRule *pModuloRule = &pIndexRule->m_vModuloRules[k];
-						if((x + pModuloRule->m_OffsetX) % pModuloRule->m_ModX == 0 && (y + pModuloRule->m_OffsetY) % pModuloRule->m_ModY == 0)
+						if((x + SeedOffsetX + pModuloRule->m_OffsetX) % pModuloRule->m_ModX == 0 && (y + SeedOffsetY + pModuloRule->m_OffsetY) % pModuloRule->m_ModY == 0)
 						{
 							PassesModuloCheck = true;
 						}
