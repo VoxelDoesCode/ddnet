@@ -228,10 +228,29 @@ SEditResult<E> CEditor::DoPropertiesWithState(CUIRect *pToolBox, CProperty *pPro
 			if(DoButton_Ex(&pIds[i], pName, 0, &Shifter, 0, nullptr, IGraphics::CORNER_ALL))
 				PopupSelectAutoMapReferenceInvoke(pProps[i].m_Value, Ui()->MouseX(), Ui()->MouseY());
 
-			int r = PopupSelectAutoMapReferenceResult();
-			if(r >= -1)
+			int Result = PopupSelectAutoMapReferenceResult();
+			if(Result >= -1)
 			{
-				*pNewVal = r;
+				*pNewVal = Result;
+				Change = i;
+				State = EEditState::ONE_GO;
+			}
+		}
+		else if(pProps[i].m_Type == PROPTYPE_GUIDE)
+		{
+			const char *pName;
+			if(pProps[i].m_Value < 0)
+				pName = "None";
+			else
+				pName = GetSelectedGroup()->m_vpLayers[pProps[i].m_Value]->m_aName;
+
+			if(DoButton_Ex(&pIds[i], pName, 0, &Shifter, 0, nullptr, IGraphics::CORNER_ALL))
+				PopupSelectAutoMapGuideInvoke(pProps[i].m_Value, Ui()->MouseX(), Ui()->MouseY());
+
+			int Result = PopupSelectAutoMapGuideResult();
+			if(Result >= -1)
+			{
+				*pNewVal = Result;
 				Change = i;
 				State = EEditState::ONE_GO;
 			}

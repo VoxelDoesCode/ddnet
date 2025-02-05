@@ -36,6 +36,7 @@ CLayerTiles::CLayerTiles(CEditor *pEditor, int w, int h) :
 	m_Tune = 0;
 	m_AutoMapperConfig = -1;
 	m_AutoMapperReference = -1;
+	m_AutoMapperGuide = -1;
 	m_Seed = 0;
 	m_AutoAutoMap = false;
 
@@ -59,6 +60,7 @@ CLayerTiles::CLayerTiles(const CLayerTiles &Other) :
 
 	m_AutoMapperConfig = Other.m_AutoMapperConfig;
 	m_AutoMapperReference = Other.m_AutoMapperReference;
+	m_AutoMapperGuide = Other.m_AutoMapperGuide;
 	m_Seed = Other.m_Seed;
 	m_AutoAutoMap = Other.m_AutoAutoMap;
 	m_Tele = Other.m_Tele;
@@ -975,6 +977,7 @@ CUi::EPopupMenuFunctionResult CLayerTiles::RenderProperties(CUIRect *pToolBox)
 		{"Color TO", m_ColorEnvOffset, PROPTYPE_INT, -1000000, 1000000},
 		{"Auto Rule", m_AutoMapperConfig, PROPTYPE_AUTOMAPPER, m_Image, 0},
 		{"Reference", m_AutoMapperReference, PROPTYPE_REFERENCE, 0, 0},
+		{"Guide", m_AutoMapperGuide, PROPTYPE_GUIDE, 0, 0},
 		{"Seed", m_Seed, PROPTYPE_INT, 0, 1000000000},
 		{nullptr},
 	};
@@ -984,10 +987,14 @@ CUi::EPopupMenuFunctionResult CLayerTiles::RenderProperties(CUIRect *pToolBox)
 		aProps[(int)ETilesProp::PROP_IMAGE].m_pName = nullptr;
 		aProps[(int)ETilesProp::PROP_COLOR].m_pName = nullptr;
 		aProps[(int)ETilesProp::PROP_AUTOMAPPER].m_pName = nullptr;
+		aProps[(int)ETilesProp::PROP_REFERENCE].m_pName = nullptr;
+		aProps[(int)ETilesProp::PROP_GUIDE].m_pName = nullptr;
 	}
 	if(m_Image == -1)
 	{
 		aProps[(int)ETilesProp::PROP_AUTOMAPPER].m_pName = nullptr;
+		aProps[(int)ETilesProp::PROP_REFERENCE].m_pName = nullptr;
+		aProps[(int)ETilesProp::PROP_GUIDE].m_pName = nullptr;
 		aProps[(int)ETilesProp::PROP_SEED].m_pName = nullptr;
 	}
 
@@ -1088,6 +1095,25 @@ CUi::EPopupMenuFunctionResult CLayerTiles::RenderProperties(CUIRect *pToolBox)
 	else if(Prop == ETilesProp::PROP_REFERENCE)
 	{
 		m_AutoMapperReference = NewVal;
+	}
+	else if(Prop == ETilesProp::PROP_GUIDE)
+	{
+		m_AutoMapperGuide = NewVal;
+		
+		/*
+		int LayerBufferIndex = 0;
+		if(m_AutoMapperGuide >= 0)
+		for(int i = 0; i < static_cast<int>(m_pEditor->GetSelectedGroup()->m_vpLayers.size()); i++)
+		{
+			if(m_pEditor->GetSelectedGroup()->m_vpLayers[i]->m_Type == LAYERTYPE_TILES)
+				LayerBufferIndex++;
+			
+			if(LayerBufferIndex == NewVal)
+			{
+				m_AutoMapperGuide = i;
+				break;
+			}
+		} */
 	}
 
 	s_Tracker.End(Prop, State);

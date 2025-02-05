@@ -2534,6 +2534,96 @@ int CEditor::PopupSelectAutoMapReferenceResult()
 	return s_AutoMapReferenceCurrent;
 }
 
+static int s_AutoMapGuideSelected = -1;
+static int s_AutoMapGuideCurrent = -1;
+
+CUi::EPopupMenuFunctionResult CEditor::PopupSelectAutoMapGuide(void *pContext, CUIRect View, bool Active)
+{
+	CEditor *pEditor = static_cast<CEditor *>(pContext);
+	std::shared_ptr<CLayerTiles> pLayer = std::static_pointer_cast<CLayerTiles>(pEditor->GetSelectedLayer(0));
+	std::shared_ptr<CLayerGroup> pGroup = std::static_pointer_cast<CLayerGroup>(pEditor->GetSelectedGroup());
+
+	std::vector<int> vLayerIds;
+
+	const float ButtonHeight = 12.0f;
+	const float ButtonMargin = 2.0f;
+
+	static CListBox s_ListBox;
+	s_ListBox.DoStart(ButtonHeight, pGroup->m_vpLayers.size() + 1, 1, 4, s_AutoMapGuideCurrent + 1, &View, false);
+	s_ListBox.DoAutoSpacing(ButtonMargin);
+
+	for(int i = 0; i <= (int)pGroup->m_vpLayers.size(); i++)
+	{
+		static int s_NoneButton = 0;
+		if(i == 0)
+		{
+			CListboxItem Item = s_ListBox.DoNextItem((void *)&s_NoneButton, s_AutoMapGuideCurrent == -1, 3.0f);
+
+			vLayerIds.push_back(-1);
+
+			if(!Item.m_Visible)
+				continue;
+			
+
+			CUIRect Label;
+			Item.m_Rect.VMargin(5.0f, &Label);
+
+			SLabelProperties Props;
+			Props.m_MaxWidth = Label.w;
+			Props.m_EllipsisAtEnd = true;
+			pEditor->Ui()->DoLabel(&Label, "None", EditorFontSizes::MENU, TEXTALIGN_ML, Props);
+		}
+		else
+		{
+			std::shared_ptr<CLayer> pCurrentLayer = pGroup->m_vpLayers[i - 1];
+			if(pCurrentLayer.get() == pLayer.get() || pCurrentLayer->m_Type != LAYERTYPE_TILES)
+				continue;
+
+			CListboxItem Item = s_ListBox.DoNextItem(pCurrentLayer->m_aName, s_AutoMapGuideCurrent == i - 1, 3.0f);
+
+			vLayerIds.push_back(i);
+
+			if(!Item.m_Visible)
+				continue;
+
+			CUIRect Label;
+			Item.m_Rect.VMargin(5.0f, &Label);
+
+			SLabelProperties Props;
+			Props.m_MaxWidth = Label.w;
+			Props.m_EllipsisAtEnd = true;
+			pEditor->Ui()->DoLabel(&Label, pCurrentLayer->m_aName, EditorFontSizes::MENU, TEXTALIGN_ML, Props);
+		}
+	}
+
+	int NewSelected = s_ListBox.DoEnd() - 1;
+	if(NewSelected != s_AutoMapGuideCurrent)
+		s_AutoMapGuideSelected = NewSelected;
+
+	return CUi::POPUP_KEEP_OPEN;
+}
+
+void CEditor::PopupSelectAutoMapGuideInvoke(int Current, float x, float y)
+{
+	static SPopupMenuId s_PopupSelectAutoMapGuideId;
+	s_AutoMapGuideSelected = -1;
+	s_AutoMapGuideCurrent = Current;
+	std::shared_ptr<CLayerTiles> pLayer = std::static_pointer_cast<CLayerTiles>(GetSelectedLayer(0));
+	std::shared_ptr<CLayerGroup> pGroup = GetSelectedGroup();
+	// Width for buttons is 120, 15 is the scrollbar width, 2 is the margin between both.
+	Ui()->DoPopupMenu(&s_PopupSelectAutoMapGuideId, x, y, 120.0f + 15.0f + 2.0f, 26.0f + 14.0f * (pGroup->m_vpLayers.size() + 1), this, PopupSelectAutoMapGuide);
+}
+
+int CEditor::PopupSelectAutoMapGuideResult()
+{
+	if(s_AutoMapGuideSelected == -100)
+		return -100;
+
+	s_AutoMapGuideCurrent = s_AutoMapGuideSelected;
+	s_AutoMapGuideSelected = -100;
+	return s_AutoMapGuideCurrent;
+}
+
 // DDRace
 
 CUi::EPopupMenuFunctionResult CEditor::PopupTele(void *pContext, CUIRect View, bool Active)
